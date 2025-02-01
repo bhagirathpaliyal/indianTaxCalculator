@@ -7,7 +7,7 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basepath:'/indianTaxCalculator',
+  basePath:'/indianTaxCalculator',
    distDir:'dist',
   eslint: {
     ignoreDuringBuilds: true,
