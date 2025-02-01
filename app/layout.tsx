@@ -3,7 +3,7 @@ import './globals.css'
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
-  title: 'indianTaxCalculator',
+  title: 'indianTaxCalculator 2025-26',
 }
 
 export default function RootLayout({
