@@ -8,6 +8,7 @@ try {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath:'/indianTaxCalculator',
+    assetPrefix: '/indianTaxCalculator/', // assetPrefix requires the trailing slash
    distDir:'dist',
   eslint: {
     ignoreDuringBuilds: true,
