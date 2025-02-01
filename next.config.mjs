@@ -1,14 +1,18 @@
 let userConfig = undefined
 try {
-  userConfig = await import('./v0-user-next.config')
+  userConfig = {
+    
+  basePath:'/indianTaxCalculator',
+    assetPrefix: '/indianTaxCalculator/', // assetPrefix requires the trailing slash
+  }
 } catch (e) {
   // ignore error
 }
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath:'/indianTaxCalculator',
    distDir:'dist',
+   output: "export",
   eslint: {
     ignoreDuringBuilds: true,
   },
