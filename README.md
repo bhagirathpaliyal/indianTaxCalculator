@@ -31,7 +31,7 @@ Indian Tax Calculator is a web-based tool built with **Next.js** to help users c
 
 1. **Clone the repository**:
     ```bash
-    git clone [<repository_url>](https://github.com/bhagirathpaliyal/indianTaxCalculator/)
+    git clone (https://github.com/bhagirathpaliyal/indianTaxCalculator/)
     cd indiantaxcalculator
     ```
 
