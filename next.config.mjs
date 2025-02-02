@@ -3,7 +3,7 @@ try {
   userConfig = {
     
   basePath:'/indianTaxCalculator',
-    assetPrefix: '/indianTaxCalculator/', // assetPrefix requires the trailing slash
+    // assetPrefix: '/indianTaxCalculator/', // assetPrefix requires the trailing slash
   }
 } catch (e) {
   // ignore error
