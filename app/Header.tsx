@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   return (
-    <div className="fixed top-0 w-full flex justify-between items-center p-[20px] shadow-md">
+    <div className="fixed top-0 w-full flex justify-between items-center p-[20px] shadow-md bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 z-10">
       <h1>IndianTaxCalculator</h1>
       <div className="flex items-center gap-[20px] px-[10px]">
         <a
