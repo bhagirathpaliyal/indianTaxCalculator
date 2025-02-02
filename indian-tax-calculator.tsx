@@ -1,12 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { InfoIcon } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface TaxSlab {
   min: number
@@ -46,7 +44,7 @@ export default function IndianTaxCalculator() {
   const [newTaxCalc, setNewTaxCalc] = useState<TaxCalculation>({ breakdown: [], totalTax: 0 })
   const [oldTaxCalc, setOldTaxCalc] = useState<TaxCalculation>({ breakdown: [], totalTax: 0 })
 
-  const calculateTax = (income: number, slabs: TaxSlab[], minTaxableIncome: number): TaxCalculation => {
+  const calculateTax = useCallback((income: number, slabs: TaxSlab[], minTaxableIncome: number): TaxCalculation => {
     if (income <= minTaxableIncome) {
       return { breakdown: [], totalTax: 0 }
     }
@@ -75,18 +73,18 @@ export default function IndianTaxCalculator() {
     }
 
     return { breakdown, totalTax }
-  }
+  }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  useEffect(() => {
     const incomeValue = Number.parseFloat(income)
     if (!isNaN(incomeValue) && incomeValue >= 0) {
       setNewTaxCalc(calculateTax(incomeValue, newTaxSlabs, 1200000))
       setOldTaxCalc(calculateTax(incomeValue, oldTaxSlabs, 700000))
     } else {
-      alert("Please enter a valid income amount")
+      setNewTaxCalc({ breakdown: [], totalTax: 0 })
+      setOldTaxCalc({ breakdown: [], totalTax: 0 })
     }
-  }
+  }, [income, calculateTax])
 
   const renderTaxBreakdown = (taxCalc: TaxCalculation, title: string) => (
     <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-inner">
@@ -121,32 +119,23 @@ export default function IndianTaxCalculator() {
   )
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 shadow-xl mt-[80px]">
-      
+    <Card className="w-full max-w-4xl mx-auto bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 shadow-xl mt-[80px]">
       <CardContent className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="income" className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Annual Income (in ₹)
-            </label>
-            <Input
-              type="number"
-              id="income"
-              value={income}
-              onChange={(e) => setIncome(e.target.value)}
-              placeholder="Enter your annual income"
-              className="text-lg p-3 border-2 border-gray-300 focus:border-gray-500 focus:ring-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
-          </div>
-          <Button
-            type="submit"
-            className="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
-          >
-            Calculate Tax
-          </Button>
-        </form>
+        <div>
+          <label htmlFor="income" className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Annual Income (in ₹)
+          </label>
+          <Input
+            type="number"
+            id="income"
+            value={income}
+            onChange={(e) => setIncome(e.target.value)}
+            placeholder="Enter your annual income"
+            className="text-lg p-3 border-2 border-gray-300 focus:border-gray-500 focus:ring-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          />
+        </div>
 
-        {income && (
+        {income && Number.parseFloat(income) <= 1200000 && (
           <Alert className="mt-6 bg-green-100 border-green-400 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-100">
             <InfoIcon className="h-5 w-5" />
             <AlertTitle>Tax Information</AlertTitle>
@@ -162,16 +151,10 @@ export default function IndianTaxCalculator() {
           </Alert>
         )}
 
-        {(newTaxCalc.totalTax > 0 || oldTaxCalc.totalTax > 0) && (
-          <Tabs defaultValue="new" className="mt-8">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="new">New Tax Regime</TabsTrigger>
-              <TabsTrigger value="old">Old Tax Regime</TabsTrigger>
-            </TabsList>
-            <TabsContent value="new">{renderTaxBreakdown(newTaxCalc, "New Tax Regime Breakdown")}</TabsContent>
-            <TabsContent value="old">{renderTaxBreakdown(oldTaxCalc, "Old Tax Regime Breakdown")}</TabsContent>
-          </Tabs>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <div>{renderTaxBreakdown(newTaxCalc, "New Tax Regime Breakdown")}</div>
+          <div>{renderTaxBreakdown(oldTaxCalc, "Old Tax Regime Breakdown")}</div>
+        </div>
 
         {(newTaxCalc.totalTax > 0 || oldTaxCalc.totalTax > 0) && (
           <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-inner">
